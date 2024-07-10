@@ -56,7 +56,7 @@ app.get('/about',async(req, res) => {
 
 app.post('/create-blog', upload.single("image"), async(req,res)=>{
     res.send("Data Sent")
-    console.log(req.body)
+    // console.log(req.body)
     const {name,title,email,message} = req.body;
     await Blog.create({
         name,
@@ -68,3 +68,14 @@ app.post('/create-blog', upload.single("image"), async(req,res)=>{
 
 })
 
+app.get("/blog/:id",async (req,res)=>{
+    const id = req.params.id
+    const blog = await Blog.findById(id)
+    res.render("readBlog",{blog})
+})
+
+app.get("/editblog/:id",async (req,res)=>{
+    const id = req.params.id
+    const blog = await Blog.findById(id)
+    res.render("editBlog",{blog})
+})

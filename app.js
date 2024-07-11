@@ -2,11 +2,15 @@ const express = require('express');
 const connectToDb = require('./database/database');
 //contactSchema
 const Blog = require('./Model/blogModel')
+//userSchema
+const User = require('./Model/userModel')
+//bcrypt
+const bcrypt = require('bcrypt')
 
 const app = express()
 
 app.use(express.json())//
-app.use(express.urlencoded({extended: true}))//
+app.use(express.urlencoded({ extended: true }))//
 
 app.set('view engine', 'ejs')//
 app.use(express.static("./Storage"))//
@@ -17,8 +21,8 @@ app.use(express.static("./Storage"))//
 
 connectToDb();
 
-const {multer,storage} = require("./Middleware/multerConfig")
-const upload = multer({storage:storage})
+const { multer, storage } = require("./Middleware/multerConfig")
+const upload = multer({ storage: storage })
 
 
 app.listen(3000, () => {
@@ -27,19 +31,18 @@ app.listen(3000, () => {
 
 
 app.get('/', (req, res) => {
-    const page = "Home Page"
-    res.render('home.ejs',{page})
+    res.render('home.ejs')
 })
 
-app.get('/blog', async(req, res) => {
+app.get('/blog', async (req, res) => {
     const page = "Blog Page"
     const blogs = await Blog.find({});
-    res.render("blog.ejs",{page,blogs})
+    res.render("blog.ejs", { page, blogs })
 })
 
 app.get('/create-blog', (req, res) => {
     const page = "Create Blog Page"
-    res.render("createBlog.ejs",{page})
+    res.render("createBlog.ejs", { page })
 })
 
 app.get('/contact_list', (req, res) => {
@@ -48,16 +51,15 @@ app.get('/contact_list', (req, res) => {
 })
 
 
-app.get('/about',async(req, res) => {
+app.get('/about', async (req, res) => {
     const page = "About Page"
     // const blogs = await Blog.find({});
-    res.render("about.ejs",{page})
+    res.render("about.ejs", { page })
 })
 
-app.post('/create-blog', upload.single("image"), async(req,res)=>{
-    res.send("Data Sent")
+app.post('/create-blog', upload.single("image"), async (req, res) => {
     // console.log(req.body)
-    const {name,title,email,message} = req.body;
+    const { name, title, email, message } = req.body;
     await Blog.create({
         name,
         title,
@@ -66,16 +68,79 @@ app.post('/create-blog', upload.single("image"), async(req,res)=>{
         image: req.file.filename
     })
 
+    res.send("Data Sent")
 })
 
-app.get("/blog/:id",async (req,res)=>{
+app.get("/blog/:id", async (req, res) => {
     const id = req.params.id
     const blog = await Blog.findById(id)
-    res.render("readBlog",{blog})
+    res.render("readBlog", { blog })
 })
 
-app.get("/editblog/:id",async (req,res)=>{
+app.get("/editblog/:id", async (req, res) => {
     const id = req.params.id
     const blog = await Blog.findById(id)
-    res.render("editBlog",{blog})
+    res.render("editBlog", { blog })
+})
+
+app.get("/register", (req, res) => {
+    res.render('register.ejs')
+})
+
+
+app.post('/editblog/:id', upload.single("image"), async (req, res) => {
+    // console.log(req.body)
+    const { name, title, email, message } = req.body;
+    const id = req.params.id;
+    await Blog.findByIdAndUpdate(id, {
+        name: name,
+        title: title,
+        email: email,
+        message: message,
+    })
+    res.send("Data Updated")
+
+})
+
+app.get('/deleteblog/:id', async (req, res) => {
+    const id = req.params.id;
+
+    await Blog.findByIdAndDelete(id)
+    res.send("Data Deleted")
+})
+
+app.post('/register', async (req, res) => {
+    // console.log(req.body)
+    const { username, email, password } = req.body;
+    await User.create({
+        username: username,
+        email: email,
+        password: bcrypt.hashSync(password, 12),
+    })
+    const page = "Home Page"
+    res.render('home.ejs', { page })
+})
+
+app.get('/login', (req, res) => {
+    res.render("login")
+})
+
+app.post('/login', async (req, res) => {
+    const { email, password } = req.body;
+    const user = await User.find({ email: email })
+    if (user.length
+        === 0) {
+        res.send("Invalid email")
+    } else {
+        // check password now 
+        const isMatched = bcrypt.compareSync(password, user[0].password)
+        if (!isMatched) {
+            res.send("Invalid password")
+        } else {
+            res.send("logged in successfully")
+            // res.redirect("/")
+        }
+    }
+
+    // console.log(user)
 })

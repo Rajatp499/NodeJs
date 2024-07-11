@@ -13,9 +13,15 @@
             padding: 0;
         }
 
+
         .navbar {
             background-color: #333;
             overflow: hidden;
+            justify-content: space-between;
+        }
+
+        .navbar-right {
+            float: right;
         }
 
         .navbar a {
@@ -67,11 +73,17 @@
 <body>
     <!-- Navigation Bar -->
     <div class="navbar">
-        <a href="/">Home</a>
-        <a href="/blog">Blog</a>
-        <a href="/create-blog">Create Blog</a>
-        <a href="/about">About</a>
-        <a href="/contact_list">Contact List</a>
+        <div class="navbar-left">
+            <a href="/">Home</a>
+            <a href="blog">Blog</a>
+            <a href="create-blog">Create Blog</a>
+            <a href="about">About</a>
+            <a href="contact_list">Contact List</a>
+        </div>
+        <div class="navbar-right">
+            <a href="register">Register</a>
+            <a href="login">Login</a>
+        </div>
     </div>
 
     <!-- Blog Content -->
@@ -86,12 +98,12 @@
                 <div class="blog-description">
                     <p><%- blog.message %>.</p>
                 </div>
-            
+
             </div>
             <button><a href="/deleteblog/<%- blog._id %>">Delete Me</a></button>
             <button><a href="/editblog/<%- blog._id %>">Edit Me</a></button>
         </div>
-    </div> 
+    </div>
 
 </body>
 

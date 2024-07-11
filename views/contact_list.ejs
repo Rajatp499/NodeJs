@@ -9,12 +9,19 @@
         body {
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
-            padding: 20px;
+            /* padding: 20px; */
+            margin: 0;
         }
+
 
         .navbar {
             background-color: #333;
             overflow: hidden;
+            justify-content: space-between;
+        }
+
+        .navbar-right {
+            float: right;
         }
 
         .navbar a {
@@ -36,7 +43,10 @@
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             overflow: hidden;
-            margin-bottom: 20px;
+            width: 90vw;
+            margin: auto;
+            margin-top: 50px;
+            /* margin-bottom: 20px; */
         }
 
         .blog-post img {
@@ -75,12 +85,17 @@
 
 <body>
     <div class="navbar">
-        <a href="/">Home</a>
-        <a href="blog">Blog</a>
-        <a href="create-blog">Create Blog</a>
-        <a href="about">About</a>
-        <a href="contact_list">Contact-List</a>
-
+        <div class="navbar-left">
+            <a href="/">Home</a>
+            <a href="blog">Blog</a>
+            <a href="create-blog">Create Blog</a>
+            <a href="about">About</a>
+            <a href="contact_list">Contact List</a>
+        </div>
+        <div class="navbar-right">
+            <a href="register">Register</a>
+            <a href="login">Login</a>
+        </div>
     </div>
 
     <div class="blog-post">

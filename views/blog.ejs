@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>About Us</title>
+  <title>Blogs</title>
   <style>
     /* Inline CSS for simplicity */
     body {
@@ -15,6 +15,10 @@
     .navbar {
       background-color: #333;
       overflow: hidden;
+      justify-content: space-between;
+    }
+    .navbar-right{
+      float: right;
     }
 
     .navbar a {
@@ -92,13 +96,18 @@
 
 <body>
   <div class="navbar">
-    <a href="/">Home</a>
-    <a href="blog">Blog</a>
-    <a href="create-blog">Create Blog</a>
-    <a href="about" class="active">About</a>
-    <a href="contact_list">Contact List</a>
-
-  </div>
+    <div class="navbar-left">
+        <a href="/">Home</a>
+        <a href="blog">Blog</a>
+        <a href="create-blog">Create Blog</a>
+        <a href="about">About</a>
+        <a href="contact_list">Contact List</a>
+    </div>
+    <div class="navbar-right">
+        <a href="register">Register</a>
+        <a href="login">Login</a>
+    </div>
+</div>
 
   <h3 style= "padding: 20px;"><%- page %></h3>
 

@@ -1,3 +1,4 @@
+require("dotenv").config()
 const express = require('express');
 const connectToDb = require('./database/database');
 //contactSchema
@@ -6,14 +7,23 @@ const Blog = require('./Model/blogModel')
 const User = require('./Model/userModel')
 //bcrypt
 const bcrypt = require('bcrypt')
+//jsonWebToken
+const jwt = require("jsonwebtoken")
+//isAuthenticated
+const isAuthenticated = require("./Middleware/isAuthenticated");
+//cokkir-parser
+const cookieParser = require("cookie-parser")
 
 const app = express()
 
 app.use(express.json())//
 app.use(express.urlencoded({ extended: true }))//
+app.use(cookieParser())
 
 app.set('view engine', 'ejs')//
 app.use(express.static("./Storage"))//
+app.use(express.static("./Css"))//
+
 
 
 //to give acces to node for only Storage folder
@@ -21,7 +31,7 @@ app.use(express.static("./Storage"))//
 
 connectToDb();
 
-const { multer, storage } = require("./Middleware/multerConfig")
+const { multer, storage } = require("./Middleware/multerConfig");
 const upload = multer({ storage: storage })
 
 
@@ -30,7 +40,7 @@ app.listen(3000, () => {
 })
 
 
-app.get('/', (req, res) => {
+app.get('/' ,(req, res) => {
     res.render('home.ejs')
 })
 
@@ -137,6 +147,10 @@ app.post('/login', async (req, res) => {
         if (!isMatched) {
             res.send("Invalid password")
         } else {
+            const token = jwt.sign({userId : user[0].id},process.env.SECRET,{
+                expiresIn : "20d"
+        })
+        res.cookie("token", token)
             res.send("logged in successfully")
             // res.redirect("/")
         }
